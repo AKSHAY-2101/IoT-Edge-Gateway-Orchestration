@@ -2,16 +2,26 @@ version: '3.8'
 services:
   nodered:
     image: nodered/node-red:latest
-    container_name: iot-node-red
+    container_name: edge-node-red
+    environment:
+      - TZ=Asia/Kolkata
     ports:
       - "1880:1880"
     volumes:
-      - node_red_data:/data
+      - ./data:/data
+    restart: unless-stopped
+
   mosquitto:
     image: eclipse-mosquitto:latest
     container_name: mqtt-broker
     ports:
       - "1883:1883"
-      - "9001:9001"
-volumes:
-  node_red_data:
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+    restart: always
+
+  influxdb:
+    image: influxdb:2.0
+    container_name: tsdb-influx
+    ports:
+      - "8086:8086"
