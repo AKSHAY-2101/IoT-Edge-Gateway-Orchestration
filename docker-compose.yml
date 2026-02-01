@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: iot-node-red
+    ports:
+      - "1880:1880"
+    volumes:
+      - node_red_data:/data
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+volumes:
+  node_red_data:
